@@ -1,9 +1,24 @@
 import React from 'react';
 import CalendarHeatmap from 'react-calendar-heatmap';
+import { Tooltip as ReactTooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
 import 'react-calendar-heatmap/dist/styles.css';
 import '../../styles/Heatmap.css'; // Import the CSS file
 
-const Heatmap = ({ data }) => {
+const Heatmap = ({ data, year }) => {
+    let startDate = new Date('2022-12-31');
+    let endDate = new Date('2023-12-31');
+    if (year) {
+        if (year == "current") {
+            endDate = new Date();
+            startDate = new Date(endDate);
+            startDate.setDate(startDate.getDate() - 365);
+        }
+        else {
+            startDate = new Date(`${year - 1}-12-31`);
+            endDate = new Date(`${year}-12-31`);
+        }
+    }
     // Define your color gradient here
     const colorGradient = [
         '#E8EAF6',
@@ -26,27 +41,44 @@ const Heatmap = ({ data }) => {
         return colorGradient[colorIndex];
     };
 
+
+    const tooltipDataAttrs = (value) => {
+        if (!value) return null;
+        return {// Set tooltip content
+            'data-tooltip-id': 'my-tooltip', // Set tooltip id
+            'data-tooltip-content': tooltipContent(value) // Set tooltip content
+        };
+    };
+    const tooltipContent = (value) => {
+        if (!value || !value.date) return null;
+        const date = new Date(value.date);
+        const day = date.getDate();
+        const month = date.toLocaleString('default', { month: 'short' });
+        const year = date.getFullYear().toString().slice(-2);
+        const formattedDate = `${day} ${month}, ${year}`;
+        return `Date: ${formattedDate}, Count: ${value.count}`;
+    };
+
+
     return (
         <div className="heatmap-container">
             <CalendarHeatmap
-                startDate={new Date('2022-12-31')} // Start date of the heatmap
-                endDate={new Date('2023-12-31')} // End date of the heatmap
+                startDate={startDate} // Start date of the heatmap
+                endDate={endDate} // End date of the heatmap
                 values={data} // Array of objects containing date and value
                 classForValue={(value) => {
                     if (!value) {
                         return 'color-empty';
                     }
-                    const val = value.count <=4 ? value.count : 5
+                    const val = value.count <= 4 ? value.count : 5
                     return `color-scale-${val}`;
                 }}
-                tooltipDataAttrs={(value) => {
-                    return {
-                        'data-tip': `${value.date} - ${value.count} problems solved`,
-                    };
-                }}
+                tooltipDataAttrs={tooltipDataAttrs}
                 showWeekdayLabels={"true"}
                 gutterSize={2}
             />
+            {/* <button data-tooltip-id="my-tooltip" data-tooltip-content="Hello world!">Hover over me</button> */}
+            <ReactTooltip id="my-tooltip" />
         </div>
     );
 };

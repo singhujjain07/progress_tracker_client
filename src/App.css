@@ -15,6 +15,17 @@
   font-size: 80px;
   font-family: 'Poppins';
 }
+.features_list{
+  font-family: 'Poppins';
+  color: #586069;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+}
+.icon1{
+  color: #28a745;
+  margin-right: 8px;
+}
 
 .home_p{
   font-size: 20px;

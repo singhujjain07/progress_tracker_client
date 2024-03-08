@@ -5,8 +5,9 @@ const Layout = ({scrollToForcesSection,scrollToLeetcodeSection, children }) => {
         <div>
             <Header scrollToForcesSection={scrollToForcesSection} scrollToLeetcodeSection={scrollToLeetcodeSection} />
             <main className='layout'
-            style={{ marginTop: "60px" }}
+            // style={{ marginTop: "60px" }}
             >
+                
                 {children}
             </main>
         </div>

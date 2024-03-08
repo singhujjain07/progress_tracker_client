@@ -7,6 +7,8 @@ import Login from './pages/Auth/Login.js';
 import HomePage from './pages/HomePage.js';
 import Register from './pages/Auth/Register.js';
 import Compiler from './pages/Compiler.js';
+import FilesSection from './components/FilesSection.js';
+import ProfilePage from './pages/ProfilePage.js';
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
         <Route path='/login' element={<Login/>}/>
         <Route path='/register' element={<Register/>}/>
         <Route path='/compiler' element={<Compiler/>}/>
+        <Route path='/files' element={<FilesSection/>}/>
+        <Route path='/profile' element={<ProfilePage/>}/>
       </Routes>
     </>
   );

@@ -78,7 +78,7 @@ const Header = ({ scrollToForcesSection, scrollToLeetcodeSection }) => {
                                     (
                                         <>
                                             <li className="nav-item">
-                                                <Link className={`nav-link mx-2 ${location.pathname === '/profile' ? 'active' : ''} btn rounded-0 btn-danger`} >
+                                                <Link className={`nav-link mx-2 ${location.pathname === '/profile' ? 'active' : ''} btn rounded-0 btn-danger`} to="/profile">
                                                     Profile
                                                 </Link>
                                             </li>

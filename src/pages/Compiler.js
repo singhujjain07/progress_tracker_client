@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import CompilerNavbar from '../components/Layout/CompilerNavbar'
 import Editor from "@monaco-editor/react";
 import spinner from '../spinner.svg'
 import Split from 'react-split';
 import { fetchFromAPI } from '../utils/fetchFromApi';
+import { useLocation } from 'react-router-dom';
 import '../styles/Compiler.css'
 
 // Save a reference to the original ResizeObserver
@@ -31,8 +32,8 @@ for (let staticMethod in OriginalResizeObserver) {
 
 const Compiler = () => {
   // State variable to set users source code
-  const [userCode, setUserCode] = useState(``);
-
+  const location = useLocation();
+  const [userCode, setUserCode] = useState(location.state?.c.content?location.state?.c.content:'');
   // State variable to set editors default language
   const [userLang, setUserLang] = useState("python3");
 
@@ -55,7 +56,7 @@ const Compiler = () => {
   const options = {
     fontSize: fontSize
   }
-  const [error, setError] = useState('');
+  // const [error, setError] = useState('');
 
   function handleSubmit() {
     setLoading(true);
@@ -75,6 +76,8 @@ const Compiler = () => {
       <CompilerNavbar
         userLang={userLang} setUserLang={setUserLang}
         userTheme={userTheme} setUserTheme={setUserTheme}
+        content={userCode}
+        c={location.state?.c}
         fontSize={fontSize} setFontSize={setFontSize}
         onFileInputChange={handleFileInputChange}
       />
@@ -125,6 +128,7 @@ const Compiler = () => {
           </div>
         </Split>
       </div>
+
     </div>
   )
 }

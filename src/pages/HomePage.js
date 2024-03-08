@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
 import Layout from '../components/Layout/Layout'
 import ProblemsGraph from '../components/ProblemsGraph'
@@ -10,6 +10,14 @@ import { useAuth } from '../context/auth'
 import { toast } from 'react-toastify'
 import { Link } from 'react-router-dom'
 import CodeforcesCard from '../components/CodeforcesCard'
+import { Tooltip as ReactTooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
+
+import { FaRegDotCircle } from 'react-icons/fa';
+import { FaCircleInfo } from "react-icons/fa6";
+import { AiFillInfoCircle } from "react-icons/ai";
+
+
 const HomePage = () => {
     const [auth, setAuth] = useAuth()
     // leetcode reference
@@ -113,7 +121,7 @@ const HomePage = () => {
         }
     }
     const [problemsForces, setProblemsForces] = useState()
-    const [heatmapForces, setHeatmapForces] = useState()
+    // const [heatmapForces, setHeatmapForces] = useState()
     const [cfidN, setCfidN] = useState("")
     const [totalProblemsSolved, setTotalProblemsSolved] = useState(0)
     useEffect(() => {
@@ -167,7 +175,7 @@ const HomePage = () => {
     }, [auth?.user]);
     return (
         <Layout scrollToForcesSection={scrollToForcesSection} scrollToLeetcodeSection={scrollToLeetcodeSection}>
-            <div className='container-fluid home_c mb-5 mt-2' style={{ backgroundColor: "#F4F8FC" }}>
+            <div className='container-fluid home_c mb-5 mt-5' style={{ backgroundColor: "#F4F8FC" }}>
                 <div className='row m-5'>
                     <div className='col-md-6 mb-5'>
                         <h1 className='home_h1'>
@@ -179,8 +187,64 @@ const HomePage = () => {
                         <button className='btn btn-primary p-3 home_btn1'>View All Services</button>
                     </div>
                     <div className='col-md-6 d-flex align-items-center justify-content-center'>
-                        <img className='home_img' src="images/1.webp" alt="Your Image Alt Text" />
+                        <img className='home_img' src="images/1.webp" alt="side_image" />
                     </div>
+                </div>
+            </div>
+            <div className='container-fluid  mb-5 mt-2' style={{ backgroundColor: "#F4F8FC", paddingLeft: "5%", paddingRight: "5%" }}>
+                {/* <div className='row mx-5'>
+                    <div className="card">
+                        <img src="/images/2.png" className="card-img-top" alt="Card background" />
+                        <div className="card-body">
+                            <h5 className="card-title">Card title</h5>
+                            <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <button type="button" class="btn btn-success">Read More</button>
+                        </div>
+                    </div>
+                </div> */}
+
+                <div className='row mx-5'>
+                    <div className='col-md-8 my-5 pt-5'>
+                        <div className='row'>
+                            <h1 className=''>Features</h1>
+                            <div className='col-md-6  d-flex align-items-center '>
+                                <ul style={{ listStyleType: 'none', padding: 0 }}>
+                                    <li className='m-2 features_list'>
+                                        <FaRegDotCircle className='icon1' /> Coding Progress Tracking
+                                    </li>
+                                    <li className='m-2 features_list'>
+                                        <FaRegDotCircle className='icon1' /> Problem Tracker
+                                    </li>
+                                    <li className='m-2 features_list'>
+                                        <FaRegDotCircle className='icon1' /> Achievement Display
+                                    </li>
+                                    <li className='m-2 features_list'>
+                                        <FaRegDotCircle className='icon1' /> Increased Accountability
+                                    </li>
+                                </ul>
+                            </div>
+                            <div className='col-md-6 d-flex align-items-center '>
+                                <ul style={{ listStyleType: 'none', padding: 0 }}>
+                                    <li className='m-2 features_list'>
+                                        <FaRegDotCircle className='icon1' /> Improved Focus
+                                    </li>
+                                    <li className='m-2 features_list'>
+                                        <FaRegDotCircle className='icon1' /> Motivation Boost
+                                    </li>
+                                    <li className='m-2 features_list'>
+                                        <FaRegDotCircle className='icon1' /> Organized Workflow
+                                    </li>
+                                    <li className='m-2 features_list'>
+                                        <FaRegDotCircle className='icon1' /> Progress Visualization
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='col-md-4  '>
+                        <img className='home_img' src="images/2.png" alt="codeforces_image" />
+                    </div>
+
                 </div>
             </div>
             {/* forces */}
@@ -188,7 +252,17 @@ const HomePage = () => {
                 <div className='container-fluid home_c' style={{ backgroundColor: "white" }}>
                     <div className='row' style={{ height: "400px" }}>
                         <div className='col-md-6 mb-5'>
-                            <h1>Codeforces</h1>
+                            <div style={{ display: "flex" }}>
+                                <h1 className=''>Codeforces</h1>
+                                <div className='d-flex align-items-start mt-2'>
+                                    <AiFillInfoCircle data-tooltip-id="info_icon_tooltip" size={"15px"} color='#2191EC' />
+                                    <ReactTooltip place="right" id="info_icon_tooltip" >
+                                        The application is in beta stage.
+                                        {<br />}
+                                        It might take some time to fetch data.
+                                    </ReactTooltip>
+                                </div>
+                            </div>
                             <p>Enter your codeforces ID to see your stats</p>
                             <div className='row'>
                                 <div className='col-md-8'>
@@ -232,7 +306,17 @@ const HomePage = () => {
                 <div className='row ' >
                     <div className='col-md-8  mb-5'>
                         <div className='ms-5'>
-                            <h1>Leetcode</h1>
+                            <div style={{ display: "flex" }}>
+                                <h1 className=''>Leetcode</h1>
+                                <div className='d-flex align-items-start mt-2'>
+                                    <AiFillInfoCircle data-tooltip-id="info_icon_tooltip" size={"15px"} color='#2191EC' />
+                                    <ReactTooltip place="right" id="info_icon_tooltip" style={{backgroundColor:"#89CFF0",color:"#000",fontStyle:"bold"}} >
+                                        The application is in beta stage.
+                                        {<br />}
+                                        It might take some time to fetch data.
+                                    </ReactTooltip>
+                                </div>
+                            </div>
                             <p>Enter your Leetcode ID to see your stats</p>
                             <div className='row'>
                                 <div className='col-md-6 mb-2'>

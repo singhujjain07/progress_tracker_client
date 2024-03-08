@@ -7,13 +7,14 @@ const CodeforcesCard = ({totalProblemsSolved}) => {
     const [maxRating,setMaxRating] = useState(0)
     const [rating,setRating] = useState(0)
     const [rank,setRank] = useState("")
-    const [auth,setAuth] = useAuth()
-    let handle;
+    // eslint-disable-next-line
+    const [auth,setAuth] = useAuth();
+    const [handle,setHandle] = useState('');
                 
     useEffect(()=>{
         if (auth?.user) {
             const { cfid } = auth.user;
-            handle = cfid
+            setHandle(cfid);
         }
     },[auth?.user])
     useEffect(() => {
@@ -32,7 +33,7 @@ const CodeforcesCard = ({totalProblemsSolved}) => {
         };
 
         fetchProblemsByRating();
-    }, [auth?.user]);
+    }, [auth?.user,handle]);
     return (
         <div className="col-md-8">
             <div className="card-body">

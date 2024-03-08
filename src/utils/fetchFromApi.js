@@ -4,7 +4,7 @@ const BASE_URL = 'https://online-code-compiler.p.rapidapi.com/v1';
 
 const options = {
     method: 'POST',
-    url: 'https://online-code-compiler.p.rapidapi.com/v1/',
+    url: BASE_URL,
     headers: {
       'content-type': 'application/json',
       'X-RapidAPI-Key': 'c981b75a76msh499a81f4d6afbb6p1fc349jsn0a5969d73e8e',

@@ -1,39 +1,49 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import CalendarHeatmap from 'react-calendar-heatmap';
+import React, { useState } from 'react'
 import 'react-calendar-heatmap/dist/styles.css';
 import '../styles/Heatmap.css'; // Import the CSS file
+import Heatmap from './Layout/Heatmap';
 
 const LeetcodeHeatmap = ({ data }) => {
+    const [selectedItem, setSelectedItem] = useState("current");
+    const [color, setColor] = useState('success');
+    const handleItemClick = (value, color) => {
+        setSelectedItem(value);
+        setColor(color);
+    };
     const formattedData = Object.entries(data).map(([date, value]) => ({
         date: new Date(parseInt(date) * 1000), // Convert timestamp to milliseconds
         count: value
-      }));
-    //   console.log(formattedData)
+    }));
     return (
         <div className='mt-5' >
             <h1 className='ms-5'>Problem Solving Heatmap</h1>
+            <div className="dropdown-center text-end">
+                <button className="btn btn-outline-dark btn-sm dropdown-toggle " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span className={`d-inline-block bg-${color} rounded-circle p-1 me-1 gap-2`} />
+                    {selectedItem}
+                </button>
+                <ul className="dropdown-menu">
+                    <li><div className="dropdown-item d-flex align-items-center gap-2 py-2" onClick={() => handleItemClick('2022', 'danger')}>
+                        <span className="d-inline-block bg-danger rounded-circle p-1" />
+                        2022
+                    </div></li>
+                    <li><div className="dropdown-item d-flex align-items-center gap-2 py-2" onClick={() => handleItemClick('2023', 'warning')}>
+                        <span className="d-inline-block bg-warning rounded-circle p-1" />
+                        2023
+                    </div></li>
+                    <li><div className="dropdown-item d-flex align-items-center gap-2 py-2" onClick={() => handleItemClick('2024', 'primary')}>
+                        <span className="d-inline-block bg-primary rounded-circle p-1" />
+                        2024
+                    </div></li>
+                    <li><div className="dropdown-item d-flex align-items-center gap-2 py-2" onClick={() => handleItemClick('current', 'success')}>
+                        <span className="d-inline-block bg-success rounded-circle p-1" />
+                        current
+                    </div></li>
+                </ul>
+            </div>
             <div className="heatmap-container ms-5">
-            <CalendarHeatmap
-                startDate={new Date('2023-12-31')} // Start date of the heatmap
-                endDate={new Date('2024-12-31')} // End date of the heatmap
-                values={formattedData} // Array of objects containing date and value
-                classForValue={(value) => {
-                    if (!value) {
-                        return 'color-empty';
-                    }
-                    const val = value.count <=4 ? value.count : 5
-                    return `color-scale-${val}`;
-                }}
-                tooltipDataAttrs={(value) => {
-                    return {
-                        'data-tip': `${value.date} - ${value.count} problems solved`,
-                    };
-                }}
-                showWeekdayLabels={"true"}
-                gutterSize={2}
-            />
-        </div>
+                <Heatmap data={formattedData} year={selectedItem} />
+            </div>
         </div>
     )
 }
