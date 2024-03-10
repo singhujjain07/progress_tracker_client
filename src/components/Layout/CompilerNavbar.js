@@ -29,7 +29,7 @@ const Navbar = ({ userLang, setUserLang, userTheme,
     ];
     const themes = [
         { value: "vs-dark", label: "Dark" },
-        { value: "light", label: "Light" },
+        { value: "light", label: "Light" },        
     ]
 
     // Function to handle file input change
@@ -113,13 +113,13 @@ const Navbar = ({ userLang, setUserLang, userTheme,
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 {/* Navbar brand */}
-                <a className="navbar-brand mt-2 mt-lg-0 me-5" href="#">
+                <Link className="navbar-brand mt-2 mt-lg-0 me-5" to="/">
                     <div className='d-flex align-items-center justify-content-center flex-row'>
                         <img className='me-2' src="images/brand.png" height={45} alt="MDB Logo" loading="lazy" />
                         <h3 className='mb-0'>NinjaX</h3>
                     </div>
 
-                </a>
+                </Link>
                 {/* Collapsible wrapper */}
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     {/* Left links */}
@@ -136,7 +136,7 @@ const Navbar = ({ userLang, setUserLang, userTheme,
                                 <li className="nav-item me-3">
                                     <Select options={themes} value={userTheme}
                                         onChange={(e) => setUserTheme(e.value)}
-                                        placeholder={userTheme == "light" ? "Light" : "Dark"} />
+                                        placeholder={userTheme == "light" ? "Light" : "Dark" } />
                                 </li>
                                 <li className="nav-item me-3">
                                     <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleFileInputChange} />
@@ -176,7 +176,7 @@ const Navbar = ({ userLang, setUserLang, userTheme,
                         {/* Avatar */}
                         <div className="dropdown">
                             <a className="dropdown-toggle d-flex align-items-center hidden-arrow" href="#" id="navbarDropdownMenuAvatar" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" className="rounded-circle" height={25} alt="Black and White Portrait of a Man" loading="lazy" />
+                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" className="rounded-circle bg-warning"  height={25} alt="Black and White Portrait of a Man" loading="lazy" />
                             </a>
                             <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
                                 <li>
@@ -211,16 +211,20 @@ const Navbar = ({ userLang, setUserLang, userTheme,
                                 <h1 className="modal-title fs-5" id="exampleModalLabel">
                                     Details
                                 </h1>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+                                <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" />
                             </div>
                             <div className="modal-body">
                                 <form>
                                     <div className="mb-3">
-                                        <label htmlFor="code-name" className="col-form-label text-light">Fileame:</label>
+                                        <label htmlFor="code-name" className="col-form-label text-light">
+                                            Fileame:
+                                        </label>
                                         <input value={filename} onChange={(e) => setFilename(e.target.value)} type="text" className="form-control bg-dark text-light" id="code-name" required />
                                     </div>
                                     <div className="mb-3">
-                                        <label htmlFor="code-desc" className="col-form-label">Description:</label>
+                                        <label htmlFor="code-desc" className="col-form-label">
+                                            Description:
+                                        </label>
                                         <textarea value={desc} onChange={(e) => setDesc(e.target.value)} className="form-control bg-dark text-light" id="code-desc" required />
                                     </div>
                                 </form>

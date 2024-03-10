@@ -2,15 +2,17 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Heatmap from '../components/Layout/Heatmap'
 import { useAuth } from '../context/auth'
+import { useForces } from '../context/forces'
 
 
 const CodeforcesHeatmap = () => {
-    const [data, setData] = useState([]);
+    // const [data, setData] = useState([]);
+    const [forces, setForces] = useForces();
     // eslint-disable-next-line
     const [auth, setAuth] = useAuth()
     const [selectedItem, setSelectedItem] = useState("current");
     const [color, setColor] = useState('success');
-    const handleItemClick = (value,color) => {
+    const handleItemClick = (value, color) => {
         console.log(value);
         setSelectedItem(value);
         setColor(color);
@@ -47,7 +49,9 @@ const CodeforcesHeatmap = () => {
                     date: new Date(date),
                     count: submissionsByDate[date],
                 }));
-                setData(heatmapData);
+                // setData(heatmapData);
+                setForces(heatmapData);
+                localStorage.setItem('forces', JSON.stringify(heatmapData))
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -55,8 +59,8 @@ const CodeforcesHeatmap = () => {
         fetchSubmissionHistory();
     }, [auth?.user]);
     return (
-        <div style={{ width: "70%", alignItems: "center", justifyContent: "center", textAlign: "center", margin: "0 auto" }}>
-            <h1>Problem Solving Heatmap</h1>
+        <div style={{ alignItems: "center", justifyContent: "center", textAlign: "center", margin: "0 auto" }}>
+            <h1 className='heatmap_head'>Problem Solving Heatmap</h1>
             {/* <div className="dropdown-center text-end">
                 <button className="btn btn-secondary btn-sm dropdown-toggle " type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     {selectedItem}
@@ -80,32 +84,33 @@ const CodeforcesHeatmap = () => {
                     </a></li>
                 </ul>
             </div> */}
-            <div className="dropdown-center text-end">
-                <button className="btn btn-outline-dark btn-sm dropdown-toggle " type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span className={`d-inline-block bg-${color} rounded-circle p-1 me-1 gap-2`} />
-                    {selectedItem}
-                </button>
-                <ul className="dropdown-menu">
-                    <li><div className="dropdown-item d-flex align-items-center gap-2 py-2" onClick={() => handleItemClick('2022', 'danger')}>
-                        <span className="d-inline-block bg-danger rounded-circle p-1" />
-                        2022
-                    </div></li>
-                    <li><div className="dropdown-item d-flex align-items-center gap-2 py-2" onClick={() => handleItemClick('2023', 'warning')}>
-                        <span className="d-inline-block bg-warning rounded-circle p-1" />
-                        2023
-                    </div></li>
-                    <li><div className="dropdown-item d-flex align-items-center gap-2 py-2" onClick={() => handleItemClick('2024','primary')}>
-                        <span className="d-inline-block bg-primary rounded-circle p-1" />
-                        2024
-                    </div></li>
-                    <li><div className="dropdown-item d-flex align-items-center gap-2 py-2" onClick={() => handleItemClick('current','success')}>
-                        <span className="d-inline-block bg-success rounded-circle p-1" />
-                        current
-                    </div></li>
-                </ul>
+            <div className='mx-auto cf_hm'>
+                <div className="dropdown-center text-end">
+                    <button className="btn btn-outline-dark btn-sm dropdown-toggle " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span className={`d-inline-block bg-${color} rounded-circle p-1 me-1 gap-2`} />
+                        {selectedItem}
+                    </button>
+                    <ul className="dropdown-menu">
+                        <li><div className="dropdown-item d-flex align-items-center gap-2 py-2" onClick={() => handleItemClick('2022', 'danger')}>
+                            <span className="d-inline-block bg-danger rounded-circle p-1" />
+                            2022
+                        </div></li>
+                        <li><div className="dropdown-item d-flex align-items-center gap-2 py-2" onClick={() => handleItemClick('2023', 'warning')}>
+                            <span className="d-inline-block bg-warning rounded-circle p-1" />
+                            2023
+                        </div></li>
+                        <li><div className="dropdown-item d-flex align-items-center gap-2 py-2" onClick={() => handleItemClick('2024', 'primary')}>
+                            <span className="d-inline-block bg-primary rounded-circle p-1" />
+                            2024
+                        </div></li>
+                        <li><div className="dropdown-item d-flex align-items-center gap-2 py-2" onClick={() => handleItemClick('current', 'success')}>
+                            <span className="d-inline-block bg-success rounded-circle p-1" />
+                            current
+                        </div></li>
+                    </ul>
+                </div>
+                <Heatmap data={forces} year={selectedItem} />
             </div>
-
-            <Heatmap data={data} year={selectedItem} />
         </div>
     )
 }

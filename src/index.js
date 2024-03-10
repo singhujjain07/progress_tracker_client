@@ -5,13 +5,19 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './context/auth';
+import { ForcesProvider } from './context/forces';
+import { LcProvider } from './context/lc';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <AuthProvider>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <ForcesProvider>
+      <LcProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </LcProvider>
+    </ForcesProvider>
   </AuthProvider>
 );
 

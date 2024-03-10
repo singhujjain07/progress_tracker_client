@@ -66,7 +66,7 @@ const FilesSection = () => {
                         ))}
 
                         <small className="d-block text-end mt-3">
-                            <a href="#">All updates</a>
+                            <Link to="/compiler">continue coding</Link>
                         </small>
                     </div>
                 </div>

@@ -7,6 +7,7 @@ import CodeforcesHeatmap from '../components/CodeforcesHeatmap'
 import CodeforcesRatingsGraph from '../components/CodeforcesRatingsGraph'
 import LeetcodeHeatmap from '../components/LeetcodeHeatmap'
 import { useAuth } from '../context/auth'
+import { useLc } from '../context/lc'
 import { toast } from 'react-toastify'
 import { Link } from 'react-router-dom'
 import CodeforcesCard from '../components/CodeforcesCard'
@@ -18,8 +19,9 @@ import { FaCircleInfo } from "react-icons/fa6";
 import { AiFillInfoCircle } from "react-icons/ai";
 
 
+
 const HomePage = () => {
-    const [auth, setAuth] = useAuth()
+    const [auth, setAuth] = useAuth();
     // leetcode reference
     const leetcodeSectionRef = useRef(null);
 
@@ -36,7 +38,10 @@ const HomePage = () => {
     const [easy, setEasy] = useState(0)
     const [medium, setMedium] = useState(0)
     const [hard, setHard] = useState(0)
-
+    const [lc, setLc] = useLc({
+        solved: 0,
+        calendar: []
+    });
 
     // update
     const [lcidN, setLcidN] = useState("")
@@ -74,14 +79,20 @@ const HomePage = () => {
         const fetchSubmissionHistory = async () => {
             try {
                 // const handle = 'singh_ujjain07'; // Replace with your Codeforces handle
-                const response = await axios.get(`https://leetcode-stats-api.herokuapp.com/${lcidN}`);
-                setData(response?.data?.submissionCalendar);
+                const response = await axios.get(`${process.env.REACT_APP_LC_URL}/${lcidN}`);
                 setEasy(response?.data?.easySolved);
                 setMedium(response?.data?.mediumSolved);
                 setHard(response?.data?.hardSolved);
                 setTotalEasy(response?.data?.totalEasy);
                 setTotalMedium(response?.data?.totalMedium);
                 setTotalHard(response?.data?.totalHard);
+                setData(response?.data?.submissionCalendar);
+                const formattedData = response?.data?.submissionCalendar ? Object.entries(response?.data?.submissionCalendar).map(([date, value]) => ({
+                    date: new Date(parseInt(date) * 1000), // Convert timestamp to milliseconds
+                    count: value
+                })) : [];
+                setLc({ solved: response?.data?.easySolved + response?.data?.mediumSolved + response?.data?.hardSolved, calendar: formattedData });
+                localStorage.setItem('lc', JSON.stringify({ solved: response?.data?.easySolved + response?.data?.mediumSolved + response?.data?.hardSolved, calendar: formattedData }))
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -138,7 +149,8 @@ const HomePage = () => {
                 // Filter submissions by problems solved
                 const submissions = response?.data?.result
                 // ---------------------------problems-------------------------------
-                const solvedProblems = submissions?.filter(submission => submission.verdict === 'OK');
+                // const solvedProblems = submissions?.filter(submission => submission.verdict === 'OK');
+                const solvedProblems =  [...new Set(submissions?.filter(submission => submission.verdict === 'OK').map(submission => submission.problem.name))];
                 setTotalProblemsSolved(solvedProblems.length)
 
                 // Count the number of problems solved for each rating
@@ -184,7 +196,7 @@ const HomePage = () => {
                         <p className='home_p'>
                             Welcome to Progress Tracker, where we make coding progress easy. Our platform tracks your problem-solving achievements on popular websites, helping you stay motivated and reach your coding goals.
                         </p>
-                        <button className='btn btn-primary p-3 home_btn1'>View All Services</button>
+                        <Link to={auth?.user ? "/profile" : "/login"} className='btn btn-primary px-3 home_p'>View Your Profile</Link>
                     </div>
                     <div className='col-md-6 d-flex align-items-center justify-content-center'>
                         <img className='home_img' src="images/1.webp" alt="side_image" />
@@ -203,45 +215,45 @@ const HomePage = () => {
                     </div>
                 </div> */}
 
-                <div className='row mx-5'>
-                    <div className='col-md-8 my-5 pt-5'>
-                        <div className='row'>
-                            <h1 className=''>Features</h1>
-                            <div className='col-md-6  d-flex align-items-center '>
+                <div className='row mx-lg-5'>
+                    <div className='col-sm-8 my-sm-5 pt-lg-5'>
+                        <div className='row '>
+                            <h1 className='features_title tc'>Features</h1>
+                            <div className='col-6 tc d-flex align-items-center '>
                                 <ul style={{ listStyleType: 'none', padding: 0 }}>
-                                    <li className='m-2 features_list'>
+                                    <li className='m-sm-2 my-2 features_list'>
                                         <FaRegDotCircle className='icon1' /> Coding Progress Tracking
                                     </li>
-                                    <li className='m-2 features_list'>
+                                    <li className='m-sm-2 my-2 features_list'>
                                         <FaRegDotCircle className='icon1' /> Problem Tracker
                                     </li>
-                                    <li className='m-2 features_list'>
+                                    <li className='m-sm-2 my-2 features_list'>
                                         <FaRegDotCircle className='icon1' /> Achievement Display
                                     </li>
-                                    <li className='m-2 features_list'>
+                                    <li className='m-sm-2 features_list'>
                                         <FaRegDotCircle className='icon1' /> Increased Accountability
                                     </li>
                                 </ul>
                             </div>
-                            <div className='col-md-6 d-flex align-items-center '>
+                            <div className='col-6 tc d-flex align-items-center '>
                                 <ul style={{ listStyleType: 'none', padding: 0 }}>
-                                    <li className='m-2 features_list'>
+                                    <li className='m-sm-2 my-2 features_list'>
                                         <FaRegDotCircle className='icon1' /> Improved Focus
                                     </li>
-                                    <li className='m-2 features_list'>
+                                    <li className='m-sm-2 my-2 features_list'>
                                         <FaRegDotCircle className='icon1' /> Motivation Boost
                                     </li>
-                                    <li className='m-2 features_list'>
+                                    <li className='m-sm-2 my-2 features_list'>
                                         <FaRegDotCircle className='icon1' /> Organized Workflow
                                     </li>
-                                    <li className='m-2 features_list'>
+                                    <li className='m-sm-2 features_list'>
                                         <FaRegDotCircle className='icon1' /> Progress Visualization
                                     </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
-                    <div className='col-md-4  '>
+                    <div className='col-sm-4 tc '>
                         <img className='home_img' src="images/2.png" alt="codeforces_image" />
                     </div>
 
@@ -249,53 +261,54 @@ const HomePage = () => {
             </div>
             {/* forces */}
             <div ref={forcesSectionRef} id='forces_section'>
-                <div className='container-fluid home_c' style={{ backgroundColor: "white" }}>
-                    <div className='row' style={{ height: "400px" }}>
-                        <div className='col-md-6 mb-5'>
-                            <div style={{ display: "flex" }}>
-                                <h1 className=''>Codeforces</h1>
-                                <div className='d-flex align-items-start mt-2'>
-                                    <AiFillInfoCircle data-tooltip-id="info_icon_tooltip" size={"15px"} color='#2191EC' />
-                                    <ReactTooltip place="right" id="info_icon_tooltip" >
-                                        The application is in beta stage.
-                                        {<br />}
-                                        It might take some time to fetch data.
-                                    </ReactTooltip>
-                                </div>
-                            </div>
-                            <p>Enter your codeforces ID to see your stats</p>
+                <div className='container-fluid home_c' style={{ backgroundColor: "#F4F8FC" }}>
+                    <div className='row'
+                    // style={{ height: "400px" }}
+                    >
+                        <div className='col-md-12 mb-5'>
                             <div className='row'>
-                                <div className='col-md-8'>
-                                    <input value={cfid} onChange={(e) => setCfid(e.target.value)} type="text" className="form-control" placeholder={cfidN ? cfidN : "Username"} aria-label="Username" />
-                                </div>
-                                <div className='col-md-4'>
-                                    {
-                                        auth?.user ? (
-                                            <button type='button' onClick={updateCfid} className='btn btn-outline-secondary'>Update</button>
-                                        ) : (
-                                            <Link type='button' to="/login" className='btn btn-outline-secondary'>Update</Link>
-                                        )
-                                    }
-                                </div>
-                            </div>
-                            <div className="card mt-3 mb-3" style={{ width: "66%" }}>
-                                <div className="row no-gutters">
-                                    <div className="col-md-4 d-flex align-items-center justify-content-center" style={{ backgroundColor: "#858E96", color: "white", fontSize: "20px" }}>
-                                        Stats
+                                <div className='col-md-6'>
+                                    <div style={{ display: "flex" }}>
+                                        <h1 className=''>Codeforces</h1>
+                                        <div className='d-flex align-items-start mt-2'>
+                                            <AiFillInfoCircle data-tooltip-id="info_icon_tooltip" size={"15px"} color='#2191EC' />
+                                            <ReactTooltip place="right" id="info_icon_tooltip" >
+                                                The application is in beta stage.
+                                                {<br />}
+                                                It might take some time to fetch data.
+                                            </ReactTooltip>
+                                        </div>
                                     </div>
+                                    <p>Enter your codeforces ID to see your stats</p>
+                                    <div className='row'>
+                                        <div className='col-8'>
+                                            <input value={cfid} onChange={(e) => setCfid(e.target.value)} type="text" className="form-control" placeholder={cfidN ? cfidN : "Username"} aria-label="Username" />
+                                        </div>
+                                        <div className='col-4'>
+                                            {
+                                                auth?.user ? (
+                                                    <button type='button' onClick={updateCfid} className='btn btn-outline-secondary'>Update</button>
+                                                ) : (
+                                                    <Link type='button' to="/login" className='btn btn-outline-secondary'>Update</Link>
+                                                )
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-md-6 " >
+                                    
                                     <CodeforcesCard totalProblemsSolved={totalProblemsSolved} />
                                 </div>
                             </div>
-
                         </div>
-                        <div className='col-md-6 mb-5'>
+                        <div className='col-md-12 my-auto'>
                             <ProblemsGraph problemsForces={problemsForces} />
                         </div>
                     </div>
                 </div>
-                <div className='container-fluid' style={{ backgroundColor: "white" }}>
+                <div className='container-fluid' style={{ backgroundColor: "#F4F8FC" }}>
                     <CodeforcesHeatmap />
-                    <div className='container-fluid mb-5' style={{ width: "60%" }}>
+                    <div className='container-fluid mb-5 ' >
                         <CodeforcesRatingsGraph />
                     </div>
                 </div>
@@ -305,29 +318,29 @@ const HomePage = () => {
             <div ref={leetcodeSectionRef} id='leetcode_section' className='container-fluid home_c' style={{ backgroundColor: "#F4F8FC" }}>
                 <div className='row ' >
                     <div className='col-md-8  mb-5'>
-                        <div className='ms-5'>
+                        <div className='ms-lg-5'>
                             <div style={{ display: "flex" }}>
-                                <h1 className=''>Leetcode</h1>
+                                <h1 className='lc_title'>Leetcode</h1>
                                 <div className='d-flex align-items-start mt-2'>
                                     <AiFillInfoCircle data-tooltip-id="info_icon_tooltip" size={"15px"} color='#2191EC' />
-                                    <ReactTooltip place="right" id="info_icon_tooltip" style={{backgroundColor:"#89CFF0",color:"#000",fontStyle:"bold"}} >
+                                    <ReactTooltip place="right" id="info_icon_tooltip" style={{ backgroundColor: "#89CFF0", color: "#000", fontStyle: "bold" }} >
                                         The application is in beta stage.
                                         {<br />}
                                         It might take some time to fetch data.
                                     </ReactTooltip>
                                 </div>
                             </div>
-                            <p>Enter your Leetcode ID to see your stats</p>
-                            <div className='row'>
-                                <div className='col-md-6 mb-2'>
-                                    <input value={lcid} onChange={(e) => setLcid(e.target.value)} type="text" className="form-control" placeholder={lcidN ? lcidN : "Username"} aria-label="Username" />
+                            <p className='lc_p'>Enter your Leetcode ID to see your stats</p>
+                            <div className='row '>
+                                <div className='col-md-6 col-8 mb-2'>
+                                    <input value={lcid} onChange={(e) => setLcid(e.target.value)} type="text" className="form-control lc_p" placeholder={lcidN ? lcidN : "Username"} aria-label="Username" />
                                 </div>
-                                <div className='col-md-6 mb-2'>
+                                <div className='col-md-6 col-4 mb-2'>
                                     {
                                         auth?.user ? (
-                                            <button type='button' onClick={updateLcid} className='btn btn-outline-secondary'>Update</button>
+                                            <button type='button' onClick={updateLcid} className='btn btn-outline-secondary lc_p'>Update</button>
                                         ) : (
-                                            <Link type='button' to="/login" className='btn btn-outline-secondary'>Update</Link>
+                                            <Link type='button' to="/login" className='btn btn-outline-secondary lc_p'>Update</Link>
                                         )
                                     }
 
@@ -335,7 +348,7 @@ const HomePage = () => {
                             </div>
                         </div>
 
-                        <LeetcodeHeatmap data={data} />
+                        <LeetcodeHeatmap />
                     </div>
                     <div className='col-md-4  mb-5 d-flex justify-content-center'>
                         <SolvedProblemsCard easy={easy} medium={medium} hard={hard} totalEasy={totalEasy} totalMedium={totalMedium} totalHard={totalHard} />

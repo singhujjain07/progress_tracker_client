@@ -48,7 +48,7 @@ const CodeforcesContestRatingGraph = () => {
   }, [auth?.user]);
 
   return (
-    <div >
+    <div className='cf_bar mx-auto' >
       {data && (
         <Line
           data={data}

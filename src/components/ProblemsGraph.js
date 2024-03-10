@@ -49,7 +49,7 @@ const CodeforcesProblemsChart = ({problemsForces}) => {
 
   
   return (
-    <div>
+    <div className='cf_bar mx-auto'>
       {problemsForces && (
         <Bar
           data={problemsForces}

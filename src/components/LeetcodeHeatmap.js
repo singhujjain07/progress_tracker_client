@@ -2,27 +2,25 @@ import React, { useState } from 'react'
 import 'react-calendar-heatmap/dist/styles.css';
 import '../styles/Heatmap.css'; // Import the CSS file
 import Heatmap from './Layout/Heatmap';
+import { useLc } from '../context/lc'
 
-const LeetcodeHeatmap = ({ data }) => {
+const LeetcodeHeatmap = () => {
+    const [lc] = useLc();
     const [selectedItem, setSelectedItem] = useState("current");
     const [color, setColor] = useState('success');
     const handleItemClick = (value, color) => {
         setSelectedItem(value);
         setColor(color);
     };
-    const formattedData = Object.entries(data).map(([date, value]) => ({
-        date: new Date(parseInt(date) * 1000), // Convert timestamp to milliseconds
-        count: value
-    }));
     return (
         <div className='mt-5' >
-            <h1 className='ms-5'>Problem Solving Heatmap</h1>
+            <h1 className='ms-lg-5 heatmap_head'>Problem Solving Heatmap</h1>
             <div className="dropdown-center text-end">
-                <button className="btn btn-outline-dark btn-sm dropdown-toggle " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button className="hm_year btn btn-outline-dark btn-sm dropdown-toggle " type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <span className={`d-inline-block bg-${color} rounded-circle p-1 me-1 gap-2`} />
                     {selectedItem}
                 </button>
-                <ul className="dropdown-menu">
+                <ul className="dropdown-menu hm_year">
                     <li><div className="dropdown-item d-flex align-items-center gap-2 py-2" onClick={() => handleItemClick('2022', 'danger')}>
                         <span className="d-inline-block bg-danger rounded-circle p-1" />
                         2022
@@ -41,8 +39,8 @@ const LeetcodeHeatmap = ({ data }) => {
                     </div></li>
                 </ul>
             </div>
-            <div className="heatmap-container ms-5">
-                <Heatmap data={formattedData} year={selectedItem} />
+            <div className="heatmap-container ms-lg-5">
+                <Heatmap data={lc.calendar} year={selectedItem} />
             </div>
         </div>
     )

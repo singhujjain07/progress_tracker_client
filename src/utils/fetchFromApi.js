@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://online-code-compiler.p.rapidapi.com/v1';
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const options = {
     method: 'POST',
@@ -22,10 +22,10 @@ export const fetchFromAPI = async ({lang,code,input}) => {
     options.data.code=code
     options.data.language=lang
     options.data.input=input
-    console.log(options.data.language)
+    // console.log(options.data.language)
     const response = await axios.request(options);
 
-    console.log(response)
+    // console.log(response)
 
     return response.data;
 }
